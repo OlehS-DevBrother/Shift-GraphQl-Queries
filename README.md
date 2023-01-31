@@ -207,3 +207,298 @@ mutation {
   }
 }
 ```
+
+### 4. Question: How to create transaction for user account?
+
+### Answer:
+
+```graphql
+mutation {
+  create_account_transaction(
+    items: [
+      {
+        user_id: "xxxxx-user_id"
+        currency_id: "BTC"
+        type: "credit"
+        amount: 0.0001
+        transaction_class: "manual"
+        comment: "Credit balance from exchange XXX"
+      }
+    ]
+  ) {
+    parent_transaction_id
+  }
+}
+```
+
+### Response:
+
+```json
+{
+  "data": {
+    "create_account_transaction": {
+      "parent_transaction_id": "94d43616-be73-4638-8b86-1d8abb4b947f"
+    }
+  }
+}
+```
+
+### 4. Question: How to get all open orders for user account?
+
+### Answer:
+
+```graphql
+query {
+  open_orders(user_id: "xxxxx-user_id") {
+    serial_id
+    order_id
+    client_order_id
+    time_in_force
+    type
+    side
+    status
+    message
+    version
+    expires_at
+    expires_at_iso
+    updated_at
+    updated_at_iso
+    instrument_id
+    instrument_strategy_id
+  }, 
+}
+```
+
+### Response:
+
+```json
+{
+  "data": {
+    "open_orders": []
+  }
+}
+```
+
+### 5. Question: How to verify two-factor authentication token?
+
+### Answer:
+
+```graphql
+mutation {
+  verify_user_mfa_token(
+      token: "xxxxx_token_xxxxx"
+    )
+}
+```
+
+### Response:
+
+```json
+{
+  "data": {
+    "verify_user_mfa_token": true
+  }
+}
+```
+
+### 6. Question: How to count estimate order price?
+
+### Answer:
+
+```graphql
+query {
+  estimate_order(
+    source_currency_id: "USD"
+    target_currency_id: "BTC"
+    price: null
+    target_currency_amount: 0.01711615
+  ) {
+    type,
+    instrument {
+      name
+      is_active
+      instrument_id
+      min_quantity
+      max_quantity
+    },
+    time_in_force,
+    side
+    price,
+    quantity_mode,
+    quantity,
+    fees {
+      amount
+    }
+  }
+}
+```
+
+### Response:
+
+```json
+{
+  "data":
+  {
+    "estimate_order":
+      {
+        "type": "market",
+        "price": 23369.54,
+        "quantity": 0.01711615,
+        "side": "buy",
+        "quantity_mode": "base",
+        "instrument":
+          {
+            "instrument_id": "BTCUSD"
+          },
+        "fees":
+          [
+            {
+              "currency_id": "BTC",
+              "amount": 0.00017116
+            }
+          ]
+       }  
+    }
+  }
+```
+
+### 7. Question: How to get the profile data for certain user?
+
+### Answer:
+
+#### For trader role:
+
+```graphql
+query {
+  user {
+    email
+    username
+    user_id
+    language
+    parent_user_id
+    integer_tracking_id
+    username
+    email
+    mobile_nr
+    language
+    timezone
+    primary_market_currency
+    is_active
+    first_name
+    last_name
+    address_country
+    address_state
+    address_city
+    address_line_1
+    address_line_2
+    address_zip
+    date_of_birth
+    fee_group_id
+    limit_group_id
+    kyc_level
+    kyc_status
+    kyc_message
+    created_at 
+    mfa_for_withdraw
+    updated_at
+    version
+    fee_group {
+      name
+      description
+    }
+    limit_group {
+      name
+      description
+      limit_group_id
+    }
+    favorite_instruments
+    notifications_settings
+    favorite_addresses_crypto {
+      address
+      name
+    }
+    favorite_fiat_destinations {
+      name
+      bank_address
+    }
+    profile_pic_url
+    passport_url
+    national_identity_url
+    driver_license_url
+    birth_certificate_url
+    bank_statement_url
+    mfa_status
+    utility_bill_url
+    parent_user {
+      user_id
+    }
+    created_at_iso
+    updated_at_iso
+    crypto_pay
+  }
+}
+```
+
+### Response:
+
+```json
+{
+  "data": {
+    "user": {
+      "email": null,
+      "username": "oleg-test-trader",
+      "user_id": "7766ad4a-57eb-4934-83ff-5757ab3ed276",
+      "language": "english",
+      "parent_user_id": null,
+      "integer_tracking_id": 9969132823,
+      "mobile_nr": null,
+      "timezone": null,
+      "primary_market_currency": "USD",
+      "is_active": "on",
+      "first_name": null,
+      "last_name": null,
+      "address_country": null,
+      "address_state": null,
+      "address_city": null,
+      "address_line_1": null,
+      "address_line_2": null,
+      "address_zip": null,
+      "date_of_birth": null,
+      "fee_group_id": "default",
+      "limit_group_id": "default",
+      "kyc_level": null,
+      "kyc_status": null,
+      "kyc_message": null,
+      "created_at": "2023-01-31 09:51:18",
+      "mfa_for_withdraw": "on",
+      "updated_at": "2023-01-31 10:32:41",
+      "version": 0,
+      "fee_group": {
+        "name": "Default Fee Group",
+        "description": "Default fee group for all new users"
+      },
+      "limit_group": {
+        "name": "Default Limit Group",
+        "description": "Default limit group for all new users",
+        "limit_group_id": "default"
+      },
+      "favorite_instruments": [],
+      "notifications_settings": [],
+      "favorite_addresses_crypto": [],
+      "favorite_fiat_destinations": [],
+      "profile_pic_url": null,
+      "passport_url": null,
+      "national_identity_url": null,
+      "driver_license_url": null,
+      "birth_certificate_url": null,
+      "bank_statement_url": null,
+      "mfa_status": "off",
+      "utility_bill_url": null,
+      "parent_user": null,
+      "created_at_iso": "2023-01-31T09:51:18+00:00",
+      "updated_at_iso": "2023-01-31T10:32:41+00:00",
+      "crypto_pay": "on"
+    }
+  }
+}
+```
