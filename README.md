@@ -35,7 +35,99 @@ query {
 }
 ````
 
-### 2. Question: How to get my current permissions?
+### 2. Question: How to create a new instrument?
+
+### Answer:
+
+````graphql
+mutation {
+  create_instrument(
+    instrument_id: "new_instrument_id"
+    name: "test instrument name"
+    base_currency_id: "TEST1"
+    quote_currency_id: "TEST2"
+    price_decimals: 5
+    min_quantity: 10
+    max_quantity: 1000
+    min_quote_quantity: 20
+    max_quote_quantity: 2000
+    is_active: on
+  ) {
+    name
+    instrument_id
+    base_currency_id
+    quote_currency_id
+    price_decimals
+    min_quantity
+    max_quantity
+    min_quote_quantity
+    max_quote_quantity
+    is_active
+    price_bars {
+      ts
+      close
+      price_24h_change
+      open
+      low
+      volume_to
+      volume_from
+    }
+    recent_price_bar(periodicity: hour) {
+      instrument_id
+      ts_iso
+      ts
+    	close
+      price_24h_change
+      open
+      low
+      volume_to
+      volume_from
+    }
+    trading_fees {
+      instrument_id
+      fee_group_id
+      maker_progressive
+      taker_progressive
+    }
+    price {
+      ts
+      ask
+      price_24h_change
+    }
+  }
+}
+````
+### Response:
+
+```json
+{
+  "data": {
+    "create_instrument": {
+      "name": "test instrument name",
+      "instrument_id": "new_instrument_id",
+      "base_currency_id": "TEST1",
+      "quote_currency_id": "TEST2",
+      "price_decimals": 5,
+      "min_quantity": 10,
+      "max_quantity": 1000,
+      "min_quote_quantity": 20,
+      "max_quote_quantity": 2000,
+      "is_active": "on",
+      "price_bars": [],
+      "recent_price_bar": null,
+      "trading_fees": {
+        "instrument_id": "new_instrument_2",
+        "fee_group_id": "default",
+        "maker_progressive": 0,
+        "taker_progressive": 0
+      },
+      "price": null
+    }
+  }
+}
+```
+
+### 3. Question: How to get my current permissions?
 ### Answer:
 
 ```graphql
@@ -144,7 +236,7 @@ query {
 }
 ```
 
-### 3. Question: How to create admin API key to be used for server to server calls?
+### 4. Question: How to create admin API key to be used for server to server calls?
 
 ### Answer:
 
@@ -208,7 +300,7 @@ mutation {
 }
 ```
 
-### 4. Question: How to create transaction for user account?
+### 5. Question: How to create transaction for user account?
 
 ### Answer:
 
@@ -219,14 +311,90 @@ mutation {
       {
         user_id: "xxxxx-user_id"
         currency_id: "BTC"
-        type: "credit"
+        type: credit
         amount: 0.0001
-        transaction_class: "manual"
+        transaction_class: manual
         comment: "Credit balance from exchange XXX"
       }
     ]
   ) {
     parent_transaction_id
+  }
+}
+```
+
+#### Note: 
+Every transaction request receives an array of items. Each one of them is the certain operation on user account.
+All the items are being executed inside of the same transaction, so the failure of one operation provokes the rollback of the whole transaction.
+
+#### Example: 
+
+```graphql
+mutation {
+  create_account_transaction(
+    items: [
+      {
+        user_id: "xxxxx-sender_id"
+        currency_id: "BTC"
+        type: credit
+        amount: 0.0010
+        transaction_class: manual
+        comment: "Credit balance from sender (payment body)"
+      },
+      {
+        user_id: "xxxxx-sender_id"
+        currency_id: "BTC"
+        type: credit
+        amount: 0.0001
+        transaction_class: fee
+        comment: "Credit balance from sender (payment fee)"
+      },
+      {
+        user_id: "fees-beneficiary-user-id"
+        currency_id: "BTC"
+        type: debit
+        amount: 0.0001
+        transaction_class: fee
+        comment: "Debit balance of commission receiver (payment fee)"
+      },
+      {
+        user_id: "xxxxx-receiver_id"
+        currency_id: "BTC"
+        type: debit
+        amount: 0.0010
+        transaction_class: manual
+        comment: "Debit balance of payment receiver (payment body)"
+      }
+    ]
+  ) {
+    parent_transaction_id
+  }
+}
+```
+
+`beneficiary_user_id` - is the required field for commission receiver address.
+
+#### Note: 
+Amount of accounts allowed to receive commission payments is limited, those are called beneficiary accounts;
+To find the user id you need to send the commission fee can be found by executing request for required fee group.
+
+To complete this you need to get the value of your account's `fee_group_id` . It's `default` for ordinary case;
+Than just complete the similar request:
+
+```graphql
+query {
+  fees_groups(fee_group_id: "default") {
+    fee_group_id
+    beneficiary_user_id
+    trading_fees {
+      fee_group_id
+      instrument_id
+    }
+    description
+    payment_fees {
+      fee_group_id
+      deposit_flat_fee
+    }
   }
 }
 ```
@@ -243,7 +411,7 @@ mutation {
 }
 ```
 
-### 4. Question: How to get all open orders for user account?
+### 5. Question: How to get all open orders for user account?
 
 ### Answer:
 
@@ -279,7 +447,7 @@ query {
 }
 ```
 
-### 5. Question: How to verify two-factor authentication token?
+### 6. Question: How to verify two-factor authentication token?
 
 ### Answer:
 
@@ -301,7 +469,7 @@ mutation {
 }
 ```
 
-### 6. Question: How to count estimate order price?
+### 7. Question: How to count estimate order price?
 
 ### Answer:
 
@@ -362,7 +530,7 @@ query {
   }
 ```
 
-### 7. Question: How to get the profile data for certain user?
+### 8. Question: How to get the profile data for certain user?
 
 ### Answer:
 
