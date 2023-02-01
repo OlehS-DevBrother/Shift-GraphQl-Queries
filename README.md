@@ -372,8 +372,6 @@ mutation {
 }
 ```
 
-`beneficiary_user_id` - is the required field for commission receiver address.
-
 #### Note: 
 Amount of accounts allowed to receive commission payments is limited, those are called beneficiary accounts;
 To find the user id you need to send the commission fee can be found by executing request for required fee group.
@@ -398,6 +396,8 @@ query {
   }
 }
 ```
+
+`beneficiary_user_id` - is the required field for commission receiver address.
 
 ### Response:
 
