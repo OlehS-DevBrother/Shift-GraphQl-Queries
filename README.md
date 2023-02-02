@@ -397,7 +397,7 @@ query {
 }
 ```
 
-`beneficiary_user_id` - is the required field for commission receiver address.
+`beneficiary_user_id` - is the required field for commission receiver id.
 
 ### Response:
 
@@ -530,7 +530,210 @@ query {
   }
 ```
 
-### 8. Question: How to get the profile data for certain user?
+### 8. Question: How to calculate and return fee for current user, payment type and currency?
+
+### Answer:
+
+```graphql
+mutation {
+  estimate_network_fee(currency_id: "BTC", network: "default") {
+    low {
+      fee_per_byte
+      gas_price
+      network_fee
+      base_fee
+      priority_fee
+    }
+    medium {
+      fee_per_byte
+      gas_price
+      network_fee
+      base_fee
+      priority_fee
+    }
+    high {
+      fee_per_byte
+      gas_price
+      network_fee
+      base_fee
+      priority_fee
+    }
+  }
+}
+```
+
+### Response:
+
+```json
+{
+  "data": {
+    "estimate_network_fee": {
+      "low": {
+        "fee_per_byte": 7,
+        "gas_price": 43,
+        "network_fee": 7,
+        "base_fee": 81,
+        "priority_fee": 62
+      },
+      "medium": {
+        "fee_per_byte": 89,
+        "gas_price": 33,
+        "network_fee": 84,
+        "base_fee": 35,
+        "priority_fee": 72
+      },
+      "high": {
+        "fee_per_byte": 99,
+        "gas_price": 66,
+        "network_fee": 17,
+        "base_fee": 17,
+        "priority_fee": 97
+      }
+    }
+  }
+}
+```
+
+### 9. Question: How to get information about all available fee groups?
+
+### Answer:
+
+```graphql
+query {
+  fees_groups {
+    fee_group_id
+    name
+    description
+    beneficiary_user_id
+  }
+}
+```
+
+##### Note: For admins only
+
+### Response:
+
+```json
+{
+  "data": {
+    "fees_groups": [
+      {
+        "fee_group_id": "9676ff1c-931e-4747-a608-55a0fb514ea1",
+        "name": "QA Fee Update",
+        "description": "Test Update",
+        "beneficiary_user_id": "fees-beneficiary-user-id"
+      },
+      {
+        "fee_group_id": "kyc-3-fee-group",
+        "name": "KYC-3 Fee Group",
+        "description": "KYC-3 fee group",
+        "beneficiary_user_id": "fees-beneficiary-user-id"
+      },
+      {
+        "fee_group_id": "kyc-2-fee-group",
+        "name": "KYC-2 Fee Group",
+        "description": "KYC-2 fee group",
+        "beneficiary_user_id": "fees-beneficiary-user-id"
+      },
+      {
+        "fee_group_id": "kyc-1-fee-group",
+        "name": "KYC-1 Fee Group",
+        "description": "KYC-1 fee group",
+        "beneficiary_user_id": "fees-beneficiary-user-id"
+      },
+      {
+        "fee_group_id": "default",
+        "name": "Default Fee Group",
+        "description": "Default fee group for all new users",
+        "beneficiary_user_id": "fees-beneficiary-user-id"
+      }
+    ]
+  }
+}
+```
+
+### 10. Question: How to create new fee group?
+
+### Answer:
+
+```graphql
+mutation {
+  create_fee_group(name: "test-fee-group", description: "Test fee group") {
+    fee_group_id
+    name
+    description
+    beneficiary_user_id
+  }
+}
+```
+
+##### Note: For admins only
+
+### Response:
+
+```json
+{
+  "data": {
+    "create_fee_group": {
+      "fee_group_id": "44bcc50e-9101-41b5-8e28-4cd941ef858e",
+      "name": "test-fee-group",
+      "description": "Test fee group",
+      "beneficiary_user_id": null
+    }
+  }
+}
+```
+
+### 11. Question: How to update fee group and assign beneficiary user?
+
+### Answer:
+
+```graphql
+mutation {
+  update_fee_group(
+    fee_group_id: "44bcc50e-9101-41b5-8e28-4cd941ef858e"
+    name: "test-fee-group", 
+    description: "Test fee group",
+    beneficiary_user_id: "6c19360a-c0a1-4213-8f6a-28900a8507e6"
+  )
+}
+```
+
+##### Note: For admins only
+
+### Response:
+
+```json
+{
+  "data": {
+    "update_fee_group": true
+  }
+}
+```
+
+### 12. Question: How to delete fee group?
+
+### Answer:
+
+```graphql
+mutation {
+  delete_fee_group(fee_group_id: "44bcc50e-9101-41b5-8e28-4cd941ef858e")
+}
+```
+
+##### Note: For admins only
+
+### Response:
+
+```json
+{
+  "data": {
+    "delete_fee_group": true
+  }
+}
+```
+
+### 13. Question: How to get the profile data for certain user?
 
 ### Answer:
 
@@ -666,6 +869,52 @@ query {
       "created_at_iso": "2023-01-31T09:51:18+00:00",
       "updated_at_iso": "2023-01-31T10:32:41+00:00",
       "crypto_pay": "on"
+    }
+  }
+}
+```
+### 14. Question: How to get deposit address details for crypto deposits?
+
+### Answer:
+
+```graphql
+query {
+  deposit_address_crypto(
+    currency_id: "BTC"
+    network: "default"
+  ) {
+        deposit_address_crypto_id
+        user_id
+        currency_id
+        address
+        address_tag_type
+        address_tag_value
+        network
+        psp_service_id
+        reference
+        created_at
+        updated_at
+    }
+}
+```
+
+### Response:
+
+```json
+{
+  "data": {
+    "deposit_address_crypto": {
+      "deposit_address_crypto_id": "95f3d75a-120d-4754-b8fe-ef1f7682858f",
+      "user_id": "6c19360a-c0a1-4213-8f6a-28900a8507e6",
+      "currency_id": "BTC",
+      "address": "dGiHWBPPjYg1uCinJjoGXu9kKt2CjemGTU",
+      "address_tag_type": null,
+      "address_tag_value": "",
+      "network": "default",
+      "psp_service_id": "SANDBOX",
+      "reference": null,
+      "created_at": "2023-02-02 09:56:56",
+      "updated_at": "2023-02-02 09:56:56"
     }
   }
 }
