@@ -1,7 +1,693 @@
 # Shift-GraphQl-Queries
 Document with examples of often used graphql requests
 
-### 1. Question: How to get list of instruments on exchange?
+# Table of Contents
+ 
+ 1. **[Guide to Exchange Page](#Guide to Exchange Page)**
+ 
+     - [Instrument price bar](#Instrument price bar) 
+     - [Instrument price plot](#Instrument price plot)
+     - [Instruments bar](#Instruments bar)
+     - **[Order bar](#Order bar)**
+     - [Estimate order](#Estimate order)
+     - [Complete order](#Complete order)
+     - [Funds bar](#Funds bar)
+     - [Generate deposit address](#Generate deposit address)
+ 
+ 2. **[Common Questions](#Common Questions)**
+    - [How to get list of instruments on exchange?](#1.)
+    - [How to create a new instrument?](#2.)
+    - [How to get my current permissions?](#3.)
+    - [How to create admin API key to be used for server calls?](#4.)
+    - [How to create transaction for user account?](#5.)
+    - [How to get all open orders for user account?](#6.)
+    - [How to verify two-factor authentication token?](#7.)
+    - [How to count estimate order price?](#8.)
+    - [How to calculate and return fee for current user, payment type and currency?](#9.)
+    - [How to get information about all available fee groups?](#10.)
+    - [How to create new fee group?](#11.)
+    - [How to update fee group and assign beneficiary user?](#12.)
+    - [How to delete fee group?](#13.)
+    - [How to get the profile data for certain user?](#14.)
+    - [How to get deposit address details for crypto deposits?](#15.)
+    - [How to add new currency to the platform?](#16.)
+ 
+# Guide to Exchange Page
+
+![whole layout](./images/whole_webpage.png)
+
+### Instrument price bar
+
+![instrument price bar](./images/instrument_price-bar.png)
+
+#### Query:
+
+```graphql
+query(
+  $instrument_id: String!
+  $limit: Int
+  $date_range: DateRangeInput
+  $periodicity: InstrumentHistoryPeriodicity
+) {
+  instrument_price_bars(
+    instrument_id: $instrument_id
+    limit: $limit
+    date_range: $date_range
+    periodicity: $periodicity
+  ) {
+    instrument_id
+    high
+    low
+    ts
+    close
+    open
+  }
+}
+```
+
+#### Variables:
+
+```json
+{
+  "instrument_id": "BTCUSDC",
+  "limit": 400,
+  "date_range": {
+    "time_from": "2023-02-05T16:46:21.000Z",
+    "time_to": "2023-02-08T20:01:21.000Z"
+  },
+  "periodicity": "minute15"
+}
+```
+
+#### Response:
+
+```json
+{
+  "data": {
+    "instrument_price_bars": [
+      {
+        "instrument_id": "BTCUSDC",
+        "high": 22873.94,
+        "low": 22856.7,
+        "ts": "2023-02-08 20:00:00",
+        "close": 22859.65,
+        "open": 22873.94
+      },
+      {
+        "instrument_id": "BTCUSDC",
+        "high": 22857.95,
+        "low": 22847.17,
+        "ts": "2023-02-08 19:45:00",
+        "close": 22853.78,
+        "open": 22856.75
+      },
+      {
+        "instrument_id": "BTCUSDC",
+        "high": 22860.81,
+        "low": 22854.21,
+        "ts": "2023-02-08 19:30:00",
+        "close": 22860.12,
+        "open": 22857.8
+      }
+    ]
+  }
+}
+```
+
+### Instrument price plot
+
+![price plot](./images/price_plot.png)
+
+#### Query:
+
+```graphql
+query(
+  $instrument_id: String!
+  $limit: Int
+  $date_range: DateRangeInput
+  $periodicity: InstrumentHistoryPeriodicity
+) {
+  instrument_price_bars(
+    instrument_id: $instrument_id
+    limit: $limit
+    date_range: $date_range
+    periodicity: $periodicity
+  ) {
+    instrument_id
+    high
+    low
+    ts
+    close
+    open
+  }
+}
+
+```
+
+#### Variables:
+
+```json
+{
+  "instrument_id": "LTCETH",
+  "limit": 400,
+  "date_range": {
+    "time_from": "2023-02-07T18:46:06.000Z",
+    "time_to": "2023-02-08T20:11:06.000Z"
+  },
+  "periodicity": "minute5"
+}
+```
+
+#### Response:
+
+```json
+{
+  "data": {
+    "instrument_price_bars": [
+      {
+        "instrument_id": "LTCETH",
+        "high": 0.059946,
+        "low": 0.059941,
+        "ts": "2023-02-08 20:10:00",
+        "close": 0.059946,
+        "open": 0.059941
+      },
+      {
+        "instrument_id": "LTCETH",
+        "high": 0.059946,
+        "low": 0.05983,
+        "ts": "2023-02-08 20:05:00",
+        "close": 0.059885,
+        "open": 0.059911
+      },
+      {
+        "instrument_id": "LTCETH",
+        "high": 0.060046,
+        "low": 0.060006,
+        "ts": "2023-02-08 20:00:00",
+        "close": 0.060006,
+        "open": 0.060046
+      }
+    ]
+  }
+}
+```
+
+### Instruments bar
+
+![instruments bar](./images/instruments_bar.png)
+
+#### Query:
+
+```graphql
+query(
+  $periodicity: InstrumentHistoryPeriodicity!
+  $limit: Int
+  $is_active: ToggleSwitch
+) {
+  instruments(is_active: $is_active) {
+    name
+    instrument_id
+    base_currency_id
+    quote_currency_id
+    price_decimals
+    min_quantity
+    max_quantity
+    min_quote_quantity
+    max_quote_quantity
+    quote_currency {
+      precision
+    }
+    base_currency {
+      precision
+    }
+    price {
+      instrument_id
+      ask
+      bid
+      price_24h_change
+      ts
+    }
+    price_bars(limit: $limit, periodicity: $periodicity) {
+      instrument_id
+      high
+      low
+      ts
+      close
+      open
+    }
+    trading_fees {
+      instrument_id
+      maker_progressive
+      taker_progressive
+      maker_flat
+      taker_flat
+    }
+    recent_price_bar(periodicity: $periodicity) {
+      instrument_id
+      high
+      low
+      ts
+      close
+      open
+    }
+  }
+}
+```
+
+#### Variables:
+
+```json
+{
+  "periodicity": "hour",
+  "limit": 24
+}
+```
+
+#### Response:
+
+```json
+{
+  "data": {
+    "instruments": [
+      {
+        "name": "AVAXBTC",
+        "instrument_id": "AVAXBTC",
+        "base_currency_id": "AVAX",
+        "quote_currency_id": "BTC",
+        "price_decimals": 8,
+        "min_quantity": 1,
+        "max_quantity": 40000,
+        "min_quote_quantity": 0.000001,
+        "max_quote_quantity": 10,
+        "quote_currency": {
+          "precision": 8
+        },
+        "base_currency": {
+          "precision": 8
+        },
+        "price": {
+          "instrument_id": "AVAXBTC",
+          "ask": 0.00088588,
+          "bid": 0.00086743,
+          "price_24h_change": -2.46,
+          "ts": "2023-02-09 00:32:39"
+        },
+        "price_bars": [
+          {
+            "instrument_id": "AVAXBTC",
+            "high": 20000,
+            "low": 0.00087195,
+            "ts": "2023-02-09 00:00:00",
+            "close": 0.00087666,
+            "open": 0.00087579
+          },
+          {
+            "instrument_id": "AVAXBTC",
+            "high": 0.00087784,
+            "low": 0.0008717,
+            "ts": "2023-02-08 23:00:00",
+            "close": 0.00087572,
+            "open": 0.000873
+          },
+          {
+            "instrument_id": "AVAXBTC",
+            "high": 0.00087524,
+            "low": 0.00087193,
+            "ts": "2023-02-08 22:00:00",
+            "close": 0.00087296,
+            "open": 0.00087345
+          }
+        ],
+        "trading_fees": {
+          "instrument_id": "ETHUSDT",
+          "maker_progressive": 0.01,
+          "taker_progressive": 0.01,
+          "maker_flat": 0,
+          "taker_flat": 0
+        },
+        "recent_price_bar": {
+          "instrument_id": "ETHUSDT",
+          "high": 34545,
+          "low": 1645.8,
+          "ts": "2023-02-09 00:00:00",
+          "close": 1652.63,
+          "open": 1650.46
+        }
+      }
+    ]
+  }
+}
+```
+
+### Order bar
+
+![order bar](./images/order_bar.png)
+
+#### Estimate order
+
+![estimate order](./images/estimate_order.png)
+
+#### Query:
+
+```graphql
+query(
+  $source_currency_id: String!
+  $target_currency_id: String!
+  $price: Float
+  $target_currency_amount: Float
+  $source_currency_amount: Float
+) {
+  estimate_order(
+    source_currency_id: $source_currency_id
+    target_currency_id: $target_currency_id
+    price: $price
+    target_currency_amount: $target_currency_amount
+    source_currency_amount: $source_currency_amount
+  ) {
+    type
+    price
+    quantity
+    side
+    quantity_mode
+    instrument {
+      instrument_id
+    }
+    fees {
+      currency_id
+      amount
+    }
+  }
+}
+```
+
+#### Variables:
+
+```json
+{
+  "source_currency_id": "BTC",
+  "target_currency_id": "ETH",
+  "price": null,
+  "target_currency_amount": 2202.1484291
+}
+```
+
+#### Response:
+
+```json
+{
+  "data": {
+    "estimate_order": {
+      "type": "market",
+      "price": 0.072716,
+      "quantity": 2202.1484291,
+      "side": "buy",
+      "quantity_mode": "base",
+      "instrument": {
+        "instrument_id": "ETHBTC"
+      },
+      "fees": [
+        {
+          "currency_id": "ETH",
+          "amount": 22.021484291
+        }
+      ]
+    }
+  }
+}
+```
+
+#### Complete order
+
+![completed order](./images/completed_order.png)
+    
+#### Query:
+
+```graphql
+mutation(
+  $instrument_id: String!
+  $type: OrderType!
+  $price: Float
+  $side: OrderSide!
+  $time_in_force: OrderTimeInForce!
+  $quantity: Float!
+  $expires_at: String
+  $quantity_mode: OrderQuantityMode
+) {
+  create_order(
+    instrument_id: $instrument_id
+    type: $type
+    price: $price
+    side: $side
+    time_in_force: $time_in_force
+    quantity: $quantity
+    expires_at: $expires_at
+    quantity_mode: $quantity_mode
+  ) {
+    order_id
+    type
+    side
+    status
+    price
+    quantity
+    executed_quantity
+    remaining_quantity
+    quantity_mode
+    instrument_id
+    message
+    updated_at
+    created_at
+    expires_at
+  }
+}
+```
+
+#### Variables:
+
+```json
+{
+  "instrument_id": "ETHBTC",
+  "type": "market",
+  "price": null,
+  "side": "sell",
+  "time_in_force": "fok",
+  "quantity": 0.25,
+  "quantity_mode": "base"
+}
+```
+
+#### Response:
+
+```json
+{
+  "data": {
+    "create_order": {
+      "order_id": "450747ce-fea8-4cf4-b3f5-b0516f855bb0",
+      "type": "market",
+      "side": "sell",
+      "status": "new",
+      "price": null,
+      "quantity": 0.25,
+      "executed_quantity": 0,
+      "remaining_quantity": 0.25,
+      "quantity_mode": "base",
+      "instrument_id": "ETHBTC",
+      "message": null,
+      "updated_at": "2023-02-09 01:06:37",
+      "created_at": "2023-02-09 01:06:37",
+      "expires_at": null
+    }
+  }
+}
+```
+
+#### Funds bar
+
+![funds bar](./images/funds_bar.png)
+    
+#### Query:
+
+```graphql
+query {
+  accounts_balances {
+    currency_id
+    total_balance
+    exposed_balance
+    currency {
+      type
+      precision
+      payment_routes {
+        crypto_network
+        crypto_network_name
+        crypto_address_tag_type
+        fiat_transfer_type
+        fiat_transfer_type_name
+      }
+    }
+    free_balance
+    free_balance_USD: free_balance_quoted(quote_currency_id: "USD")
+    free_balance_BTC: free_balance_quoted(quote_currency_id: "BTC")
+    free_balance_ETH: free_balance_quoted(quote_currency_id: "ETH")
+    free_balance_USDT: free_balance_quoted(quote_currency_id: "USDT")
+  }
+}
+```
+
+#### Response:
+
+```json
+{
+  "data": {
+    "accounts_balances": [
+      {
+        "currency_id": "ALGO",
+        "total_balance": 1000,
+        "exposed_balance": 0,
+        "currency": {
+          "type": "crypto",
+          "precision": 8,
+          "payment_routes": [
+            {
+              "crypto_network": "default",
+              "crypto_network_name": "Algo",
+              "crypto_address_tag_type": "",
+              "fiat_transfer_type": null,
+              "fiat_transfer_type_name": null
+            }
+          ]
+        },
+        "free_balance": 1000,
+        "free_balance_USD": null,
+        "free_balance_BTC": null,
+        "free_balance_ETH": null,
+        "free_balance_USDT": 288.9
+      },
+      {
+        "currency_id": "AVAX",
+        "total_balance": 1000,
+        "exposed_balance": 0,
+        "currency": {
+          "type": "crypto",
+          "precision": 8,
+          "payment_routes": [
+            {
+              "crypto_network": "default",
+              "crypto_network_name": "Ethereum",
+              "crypto_address_tag_type": "",
+              "fiat_transfer_type": "default",
+              "fiat_transfer_type_name": "Default Transfer Type"
+            }
+          ]
+        },
+        "free_balance": 1000,
+        "free_balance_USD": null,
+        "free_balance_BTC": 0.88731,
+        "free_balance_ETH": null,
+        "free_balance_USDT": 20380
+      },
+      {
+        "currency_id": "BCH",
+        "total_balance": 1000,
+        "exposed_balance": 0,
+        "currency": {
+          "type": "crypto",
+          "precision": 8,
+          "payment_routes": [
+            {
+              "crypto_network": "default",
+              "crypto_network_name": "Bitcoin Cash",
+              "crypto_address_tag_type": "",
+              "fiat_transfer_type": null,
+              "fiat_transfer_type_name": null
+            }
+          ]
+        },
+        "free_balance": 1000,
+        "free_balance_USD": null,
+        "free_balance_BTC": 5.8216,
+        "free_balance_ETH": null,
+        "free_balance_USDT": 133590
+      },
+      {
+        "currency_id": "XRP",
+        "total_balance": 1000,
+        "exposed_balance": 0,
+        "currency": {
+          "type": "crypto",
+          "precision": 6,
+          "payment_routes": [
+            {
+              "crypto_network": "default",
+              "crypto_network_name": "Ripple",
+              "crypto_address_tag_type": "",
+              "fiat_transfer_type": null,
+              "fiat_transfer_type_name": null
+            }
+          ]
+        },
+        "free_balance": 1000,
+        "free_balance_USD": null,
+        "free_balance_BTC": 0.01755,
+        "free_balance_ETH": 0.243743,
+        "free_balance_USDT": 399.23
+      }
+    ]
+  }
+}
+```
+
+#### Generate deposit address
+
+![generate deposit address](./images/generate_deposit_address.png)
+    
+#### Query:
+
+```graphql
+query($network: String, $currency_id: String!) {
+  deposit_address_crypto(network: $network, currency_id: $currency_id) {
+    deposit_address_crypto_id
+    currency_id
+    address
+    address_tag_type
+    address_tag_value
+    network
+    created_at
+    updated_at
+  }
+}
+```
+
+#### Variables:
+
+```json
+{
+  "currency_id": "ETH"
+}
+```
+
+#### Response:
+
+```json
+{
+  "data": {
+    "deposit_address_crypto": {
+      "deposit_address_crypto_id": "e113a647-2ffc-47ec-a0f0-88731b4bf430",
+      "currency_id": "ETH",
+      "address": "eD32LSZzwhHPDvXCIv5kUGnHAu9nOMwcTw",
+      "address_tag_type": null,
+      "address_tag_value": "",
+      "network": "default",
+      "created_at": "2023-02-09 01:57:37",
+      "updated_at": "2023-02-09 01:57:37"
+    }
+  }
+}
+```
+
+# Common Questions
+
+### 1.
+### Question: How to get list of instruments on exchange?
 
 ### Answer:
 
@@ -35,7 +721,8 @@ query {
 }
 ````
 
-### 2. Question: How to create a new instrument?
+### 2. 
+### Question: How to create a new instrument?
 
 ### Answer:
 
@@ -127,7 +814,9 @@ mutation {
 }
 ```
 
-### 3. Question: How to get my current permissions?
+### 3. 
+### Question: How to get my current permissions?
+
 ### Answer:
 
 ```graphql
@@ -236,7 +925,8 @@ query {
 }
 ```
 
-### 4. Question: How to create admin API key to be used for server to server calls?
+### 4. 
+### Question: How to create admin API key to be used for server calls?
 
 ### Answer:
 
@@ -300,7 +990,8 @@ mutation {
 }
 ```
 
-### 5. Question: How to create transaction for user account?
+### 5. 
+### Question: How to create transaction for user account?
 
 ### Answer:
 
@@ -411,7 +1102,8 @@ query {
 }
 ```
 
-### 5. Question: How to get all open orders for user account?
+### 6. 
+### Question: How to get all open orders for user account?
 
 ### Answer:
 
@@ -447,7 +1139,8 @@ query {
 }
 ```
 
-### 6. Question: How to verify two-factor authentication token?
+### 7. 
+### Question: How to verify two-factor authentication token?
 
 ### Answer:
 
@@ -469,7 +1162,8 @@ mutation {
 }
 ```
 
-### 7. Question: How to count estimate order price?
+### 8. 
+### Question: How to count estimate order price?
 
 ### Answer:
 
@@ -530,7 +1224,8 @@ query {
   }
 ```
 
-### 8. Question: How to calculate and return fee for current user, payment type and currency?
+### 9. 
+### Question: How to calculate and return fee for current user, payment type and currency?
 
 ### Answer:
 
@@ -594,7 +1289,8 @@ mutation {
 }
 ```
 
-### 9. Question: How to get information about all available fee groups?
+### 10. 
+### Question: How to get information about all available fee groups?
 
 ### Answer:
 
@@ -652,7 +1348,8 @@ query {
 }
 ```
 
-### 10. Question: How to create new fee group?
+### 11. 
+### Question: How to create new fee group?
 
 ### Answer:
 
@@ -684,7 +1381,8 @@ mutation {
 }
 ```
 
-### 11. Question: How to update fee group and assign beneficiary user?
+### 12. 
+### Question: How to update fee group and assign beneficiary user?
 
 ### Answer:
 
@@ -711,7 +1409,8 @@ mutation {
 }
 ```
 
-### 12. Question: How to delete fee group?
+### 13. 
+### Question: How to delete fee group?
 
 ### Answer:
 
@@ -733,7 +1432,8 @@ mutation {
 }
 ```
 
-### 13. Question: How to get the profile data for certain user?
+### 14. 
+### Question: How to get the profile data for certain user?
 
 ### Answer:
 
@@ -873,7 +1573,9 @@ query {
   }
 }
 ```
-### 14. Question: How to get deposit address details for crypto deposits?
+
+### 15. 
+### Question: How to get deposit address details for crypto deposits?
 
 ### Answer:
 
@@ -915,6 +1617,54 @@ query {
       "reference": null,
       "created_at": "2023-02-02 09:56:56",
       "updated_at": "2023-02-02 09:56:56"
+    }
+  }
+}
+```
+
+### 16. 
+### Question: How to add new currency to the platform?
+
+### Answer:
+
+```graphql
+mutation {
+  create_currency(
+    currency_id: "TEST"
+    precision: 10
+    type: fiat
+    is_active: on
+  ) {
+    currency_id
+    is_active
+    name
+    payment_routes {
+      currency_id
+      crypto_network
+      crypto_network_name
+      psp_balance
+      psp_service_id
+      payment_route_id
+      fiat_transfer_type
+    }
+    precision
+    type
+  }
+}
+```
+
+### Response:
+
+```json
+{
+  "data": {
+    "create_currency": {
+      "currency_id": "TEST",
+      "is_active": "on",
+      "name": "TEST",
+      "payment_routes": [],
+      "precision": 10,
+      "type": "fiat"
     }
   }
 }
