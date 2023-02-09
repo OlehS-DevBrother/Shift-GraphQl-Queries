@@ -36,6 +36,38 @@ Document with examples of often used graphql requests
 
 ![whole layout](./images/whole_webpage.png)
 
+### Get started
+
+Playground: https://vakotrade.cryptosrvc-dev.com/graphql
+
+In order to quickly get started we have special demo environment where you can play around. JWT tokens generated after following mutations live very long time. So, you can reuse them not worring on expiration time. 
+
+#### Get trader JWT token
+
+You can use any username, if it does not exist trader account will be created. Additionally, all newly created traders automatically get bonus of 1000 of every coins on accounts. So, you can immediately start trading. 
+
+```graphql
+mutation {
+  trader_demo_signin(username:"test.trader@domain.com") {
+    jwt
+    expires_at
+  }
+}
+```
+
+#### Get demo admin JWT token
+You can use any username, if it does not exist admin account will be created. Admins created this way get all possible permissions on exchange. This is essentially superadmins. 
+
+
+```graphql 
+mutation {
+  admin_demo_signin(username:"test.admin@domain.com") {
+    jwt
+    expires_at
+  }
+}
+```
+
 ### Instrument price bar
 
 ![instrument price bar](./images/instrument_price-bar.png)
