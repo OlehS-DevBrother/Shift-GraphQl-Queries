@@ -113,6 +113,7 @@ query(
   }
 }
 ```
+[back to the top &#11023;](#table-of-contents)
 
 ### Instrument price chart
 
@@ -192,6 +193,7 @@ query(
   }
 }
 ```
+[back to the top &#11023;](#table-of-contents)
 
 ### Instruments panel
 
@@ -339,6 +341,7 @@ query(
   }
 }
 ```
+[back to the top &#11023;](#table-of-contents)
 
 ### Order panel
 
@@ -416,6 +419,7 @@ query(
   }
 }
 ```
+[back to the top &#11023;](#table-of-contents)
 
 #### Complete order
 
@@ -500,6 +504,7 @@ mutation(
   }
 }
 ```
+[back to the top &#11023;](#table-of-contents)
 
 #### Balances panel
 
@@ -635,6 +640,7 @@ query {
   }
 }
 ```
+[back to the top &#11023;](#table-of-contents)
 
 #### Generate deposit address
 
@@ -683,6 +689,7 @@ query($network: String, $currency_id: String!) {
   }
 }
 ```
+[back to the top &#11023;](#table-of-contents)
 
 # Common Questions
 
@@ -720,6 +727,7 @@ query {
   }
 }
 ````
+[back to the top &#11023;](#table-of-contents)
 
 ### 2. 
 ### Question: How to create a new instrument?
@@ -813,6 +821,7 @@ mutation {
   }
 }
 ```
+[back to the top &#11023;](#table-of-contents)
 
 ### 3. 
 ### Question: How to get my current permissions?
@@ -924,6 +933,7 @@ query {
   }
 }
 ```
+[back to the top &#11023;](#table-of-contents)
 
 ### 4. 
 ### Question: How to create admin API key to be used for server calls?
@@ -989,6 +999,7 @@ mutation {
   }
 }
 ```
+[back to the top &#11023;](#table-of-contents)
 
 ### 5. 
 ### Question: How to create transaction for user account?
@@ -1101,6 +1112,7 @@ query {
   }
 }
 ```
+[back to the top &#11023;](#table-of-contents)
 
 ### 6. 
 ### Question: How to get all open orders for user account?
@@ -1138,6 +1150,7 @@ query {
   }
 }
 ```
+[back to the top &#11023;](#table-of-contents)
 
 ### 7. 
 ### Question: How to verify two-factor authentication token?
@@ -1161,6 +1174,7 @@ mutation {
   }
 }
 ```
+[back to the top &#11023;](#table-of-contents)
 
 ### 8. 
 ### Question: How to count estimate order price?
@@ -1223,6 +1237,7 @@ query {
     }
   }
 ```
+[back to the top &#11023;](#table-of-contents)
 
 ### 9. 
 ### Question: How to calculate and return fee for current user, payment type and currency?
@@ -1288,6 +1303,7 @@ mutation {
   }
 }
 ```
+[back to the top &#11023;](#table-of-contents)
 
 ### 10. 
 ### Question: How to get information about all available fee groups?
@@ -1347,6 +1363,7 @@ query {
   }
 }
 ```
+[back to the top &#11023;](#table-of-contents)
 
 ### 11. 
 ### Question: How to create new fee group?
@@ -1380,6 +1397,7 @@ mutation {
   }
 }
 ```
+[back to the top &#11023;](#table-of-contents)
 
 ### 12. 
 ### Question: How to update fee group and assign beneficiary user?
@@ -1408,6 +1426,7 @@ mutation {
   }
 }
 ```
+[back to the top &#11023;](#table-of-contents)
 
 ### 13. 
 ### Question: How to delete fee group?
@@ -1431,6 +1450,7 @@ mutation {
   }
 }
 ```
+[back to the top &#11023;](#table-of-contents)
 
 ### 14. 
 ### Question: How to get the profile data for certain user?
@@ -1573,6 +1593,7 @@ query {
   }
 }
 ```
+[back to the top &#11023;](#table-of-contents)
 
 ### 15. 
 ### Question: How to get deposit address details for crypto deposits?
@@ -1621,6 +1642,7 @@ query {
   }
 }
 ```
+[back to the top &#11023;](#table-of-contents)
 
 ### 16. 
 ### Question: How to add new currency to the platform?
@@ -1669,3 +1691,4 @@ mutation {
   }
 }
 ```
+[back to the top &#11023;](#table-of-contents)
