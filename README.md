@@ -3,18 +3,18 @@ Document with examples of often used graphql requests
 
 # Table of Contents
  
- 1. **[Guide to Exchange Page](#Guide to Exchange Page)**
+ 1. **[Guide to Exchange Page](#guide-to-exchange-page)**
  
-     - [Instrument price bar](#Instrument price bar) 
-     - [Instrument price plot](#Instrument price plot)
-     - [Instruments bar](#Instruments bar)
-     - **[Order bar](#Order bar)**
-     - [Estimate order](#Estimate order)
-     - [Complete order](#Complete order)
-     - [Funds bar](#Funds bar)
-     - [Generate deposit address](#Generate deposit address)
+     - [Instrument price bar](#instrument-price-bar) 
+     - [Instrument price chart](#instrument-price-chart)
+     - [Instruments panel](#instruments-panel)
+     - **[Order panel](#order-panel)**
+     - [Estimate order](#estimate-order)
+     - [Complete order](#complete-order)
+     - [Balances panel](#balances-panel)
+     - [Generate deposit address](#generate-deposit-address)
  
- 2. **[Common Questions](#Common Questions)**
+ 2. **[Common Questions](#common-questions)**
     - [How to get list of instruments on exchange?](#1.)
     - [How to create a new instrument?](#2.)
     - [How to get my current permissions?](#3.)
@@ -114,7 +114,7 @@ query(
 }
 ```
 
-### Instrument price plot
+### Instrument price chart
 
 ![price plot](./images/price_plot.png)
 
@@ -193,7 +193,7 @@ query(
 }
 ```
 
-### Instruments bar
+### Instruments panel
 
 ![instruments bar](./images/instruments_bar.png)
 
@@ -340,9 +340,9 @@ query(
 }
 ```
 
-### Order bar
+### Order panel
 
-![order bar](./images/order_bar.png)
+![order panel](./images/order_bar.png)
 
 #### Estimate order
 
@@ -501,9 +501,9 @@ mutation(
 }
 ```
 
-#### Funds bar
+#### Balances panel
 
-![funds bar](./images/funds_bar.png)
+![balances panel](./images/funds_bar.png)
     
 #### Query:
 
