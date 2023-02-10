@@ -1692,3 +1692,70 @@ mutation {
 }
 ```
 [back to the top &#11023;](#table-of-contents)
+
+### Fees & Limits structure
+
+We have fee groups and limit groups. User always belong to ONE fee group and ONE limit group. This is essentially properties on user entity, so fee_group_id and limit_group_id are referencing correspondent records fee_groups and limit_groups. 
+
+Table limit_groups
+
+```
+limit_group_id
+name
+description
+```
+
+Table fees_groups
+```
+fee_group_id
+name
+description
+beneficiary_user_id
+```
+
+Then, there are actual payments_fees, payments_limits and trading_fees.
+
+Table trading_fees
+```
+fee_group_id
+instrument_id
+maker_progressive
+taker_progressive
+maker_flat
+taker_flat
+```
+
+Table payments_fees
+```
+fee_group_id
+currency_id
+withdrawal_progressive_fee
+withdrawal_flat_fee
+deposit_progressive_fee
+deposit_flat_fee
+```
+
+Table payments_limits
+```
+limit_group_id
+currency_id
+withdrawal_enabled
+withdrawal_min_amount
+withdrawal_auto_approval_amount
+withdrawal_daily_limit
+withdrawal_weekly_limit
+withdrawal_monthly_limit
+deposit_enabled
+deposit_min_amount
+deposit_auto_approval_amount
+deposit_daily_limit
+deposit_weekly_limit
+deposit_monthly_limit
+```
+
+Thus, full connections between user and fees or limits looks like: 
+```
+user.limit_group_id <> limit_groups.limit_group_id <> payments_limits.limit_group_id
+user.fee_group_id <> fee_groups.fee_group_id <> payments_fees.fee_group_id
+user.fee_group_id <> fee_groups.fee_group_id <> trading_fees.fee_group_id
+```
