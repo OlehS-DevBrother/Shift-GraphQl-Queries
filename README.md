@@ -3,7 +3,8 @@ Document with examples of often used graphql requests
 
 # Table of Contents
  
- 1. **[Guide to Exchange Page](#guide-to-exchange-page)**
+ 1. **[Get Started](#get-started)**
+ 2. **[Guide to Exchange Page](#guide-to-exchange-page)**
  
      - [Instrument price bar](#instrument-price-bar) 
      - [Instrument price chart](#instrument-price-chart)
@@ -14,29 +15,30 @@ Document with examples of often used graphql requests
      - [Balances panel](#balances-panel)
      - [Generate deposit address](#generate-deposit-address)
  
- 2. **[Common Questions](#common-questions)**
-    - [How to get list of instruments on exchange?](#1)
-    - [How to create a new instrument?](#2)
-    - [How to get my current permissions?](#3)
-    - [How to create admin API key to be used for server calls?](#4)
-    - [How to create transaction for user account?](#5)
-    - [How to get all open orders for user account?](#6)
-    - [How to verify two-factor authentication token?](#7)
-    - [How to count estimate order price?](#8)
-    - [How to calculate and return fee for current user, payment type and currency?](#9)
-    - [How to get information about all available fee groups?](#10)
-    - [How to create new fee group?](#11)
-    - [How to update fee group and assign beneficiary user?](#12)
-    - [How to delete fee group?](#13)
-    - [How to get the profile data for certain user?](#14)
-    - [How to get deposit address details for crypto deposits?](#15)
-    - [How to add new currency to the platform?](#16)
- 
-# Guide to Exchange Page
+ 3. **[Common Questions](#common-questions)**
+    - **For admins and traders**
+        - [How to get my current permissions?](#3)
+        - [How to create admin API key to be used for server calls?](#4)
+        - [How to get all open orders for user account?](#6)
+        - [How to count estimate order price?](#8)
+        - [How to calculate and return fee for current user, payment type and currency?](#9)
+        - [How to get the profile data for certain user?](#14)
+        - [How to get deposit address details for crypto deposits?](#15)                  
+         
+    - **For admins only**
+        - [How to get list of instruments on exchange?](#1)
+        - [How to create a new instrument?](#2)
+        - [How to create transaction for user account?](#5)
+        - [How to verify two-factor authentication token?](#7)
+        - [How to get information about all available fee groups?](#10)
+        - [How to create new fee group?](#11)
+        - [How to update fee group and assign beneficiary user?](#12)
+        - [How to delete fee group?](#13)
+        - [How to add new currency to the platform?](#16)
+  
+  4. **[Fees & Limits structure](#fees-and-limits-structure)**
 
-![whole layout](./images/whole_webpage.png)
-
-### Get started
+## Get started
 
 Playground: https://vakotrade.cryptosrvc-dev.com/graphql
 
@@ -67,6 +69,11 @@ mutation {
   }
 }
 ```
+[back to the top &#11023;](#table-of-contents)
+
+## Guide to Exchange Page
+
+![whole layout](./images/whole_webpage.png)
 
 ### Instrument price bar
 
@@ -727,6 +734,7 @@ query($network: String, $currency_id: String!) {
 
 ### 1.
 ### Question: How to get list of instruments on exchange?
+#### roles: [`admin`]
 
 ### Answer:
 
@@ -763,6 +771,7 @@ query {
 
 ### 2. 
 ### Question: How to create a new instrument?
+#### roles: [`admin`]
 
 ### Answer:
 
@@ -857,6 +866,7 @@ mutation {
 
 ### 3. 
 ### Question: How to get my current permissions?
+#### roles: [`admin`, `trader`]
 
 ### Answer:
 
@@ -969,6 +979,7 @@ query {
 
 ### 4. 
 ### Question: How to create admin API key to be used for server calls?
+#### roles: [`admin`, `trader`]
 
 ### Answer:
 
@@ -1035,6 +1046,7 @@ mutation {
 
 ### 5. 
 ### Question: How to create transaction for user account?
+#### roles: [`admin`]
 
 ### Answer:
 
@@ -1148,6 +1160,7 @@ query {
 
 ### 6. 
 ### Question: How to get all open orders for user account?
+#### roles: [`admin`, `trader`]
 
 ### Answer:
 
@@ -1186,6 +1199,7 @@ query {
 
 ### 7. 
 ### Question: How to verify two-factor authentication token?
+#### roles: [`admin`]
 
 ### Answer:
 
@@ -1210,6 +1224,7 @@ mutation {
 
 ### 8. 
 ### Question: How to count estimate order price?
+#### roles: [`admin`, `trader`]
 
 ### Answer:
 
@@ -1273,6 +1288,7 @@ query {
 
 ### 9. 
 ### Question: How to calculate and return fee for current user, payment type and currency?
+#### roles: [`admin`, `trader`]
 
 ### Answer:
 
@@ -1339,6 +1355,7 @@ mutation {
 
 ### 10. 
 ### Question: How to get information about all available fee groups?
+#### roles: [`admin`]
 
 ### Answer:
 
@@ -1399,6 +1416,7 @@ query {
 
 ### 11. 
 ### Question: How to create new fee group?
+#### roles: [`admin`]
 
 ### Answer:
 
@@ -1433,6 +1451,7 @@ mutation {
 
 ### 12. 
 ### Question: How to update fee group and assign beneficiary user?
+#### roles: [`admin`]
 
 ### Answer:
 
@@ -1462,6 +1481,7 @@ mutation {
 
 ### 13. 
 ### Question: How to delete fee group?
+#### roles: [`admin`]
 
 ### Answer:
 
@@ -1486,6 +1506,7 @@ mutation {
 
 ### 14. 
 ### Question: How to get the profile data for certain user?
+#### roles: [`admin`, `trader`]
 
 ### Answer:
 
@@ -1629,6 +1650,7 @@ query {
 
 ### 15. 
 ### Question: How to get deposit address details for crypto deposits?
+#### roles: [`admin`, `trader`]
 
 ### Answer:
 
@@ -1678,6 +1700,7 @@ query {
 
 ### 16. 
 ### Question: How to add new currency to the platform?
+#### roles: [`admin`]
 
 ### Answer:
 
@@ -1725,7 +1748,7 @@ mutation {
 ```
 [back to the top &#11023;](#table-of-contents)
 
-### Fees & Limits structure
+### Fees and Limits structure
 
 We have fee groups and limit groups. User always belong to ONE fee group and ONE limit group. This is essentially properties on user entity, so fee_group_id and limit_group_id are referencing correspondent records fee_groups and limit_groups. 
 
@@ -1791,3 +1814,4 @@ user.limit_group_id <> limit_groups.limit_group_id <> payments_limits.limit_grou
 user.fee_group_id <> fee_groups.fee_group_id <> payments_fees.fee_group_id
 user.fee_group_id <> fee_groups.fee_group_id <> trading_fees.fee_group_id
 ```
+[back to the top &#11023;](#table-of-contents)
