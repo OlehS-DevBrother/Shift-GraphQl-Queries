@@ -4,6 +4,7 @@ Document with examples of often used graphql requests
 # Table of Contents
  
  1. **[Get Started](#get-started)**
+ 
  2. **[Guide to Exchange Page](#guide-to-exchange-page)**
  
      - [Instrument price bar](#instrument-price-bar) 
@@ -14,8 +15,15 @@ Document with examples of often used graphql requests
      - [Complete order](#complete-order)
      - [Balances panel](#balances-panel)
      - [Generate deposit address](#generate-deposit-address)
+     - [Orderbook panel](#orderbook-panel)
  
- 3. **[Common Questions](#common-questions)**
+ 3. **[Guide to Markets Page](#guide-to-markets-page)**
+     
+     - [Estimate conversion](#estimate-conversion)
+     - [Complete conversion](#complete-conversion)
+ 
+ 4. **[Common Questions](#common-questions)**
+    
     - **For admins and traders**
         - [How to get my current permissions?](#3)
         - [How to create admin API key to be used for server calls?](#4)
@@ -36,7 +44,7 @@ Document with examples of often used graphql requests
         - [How to delete fee group?](#13)
         - [How to add new currency to the platform?](#16)
   
-  4. **[Fees & Limits structure](#fees-and-limits-structure)**
+ 5. **[Fees & Limits structure](#fees-and-limits-structure)**
 
 ## Get started
 
@@ -724,6 +732,246 @@ query($network: String, $currency_id: String!) {
       "network": "default",
       "created_at": "2023-02-09 01:57:37",
       "updated_at": "2023-02-09 01:57:37"
+    }
+  }
+}
+```
+[back to the top &#11023;](#table-of-contents)
+
+#### Orderbook panel
+
+![orderbook panel](./images/orderbook_panel.png)
+    
+#### Query:
+
+```graphql
+subscription($instrument_id: String!) {
+  orderbook(instrument_id: $instrument_id) {
+    instrument_id
+    sell {
+      price
+      quantity
+    }
+    buy {
+      price
+      quantity
+    }
+    ts
+    ts_iso
+  }
+}
+```
+
+#### Variables:
+
+```json
+{
+  "instrument_id": "ETHBTC"
+}
+```
+
+#### Response:
+
+```json
+{
+  "data": {
+    "orderbook": {
+      "instrument_id": "ETHBTC",
+      "sell": [
+        {
+          "price": 0.070847,
+          "quantity": 0.0255
+        },
+        {
+          "price": 0.070858,
+          "quantity": 0.618
+        },
+        {
+          "price": 0.070868,
+          "quantity": 9.62925
+        },
+        {
+          "price": 0.070878,
+          "quantity": 0.50325
+        },
+        {
+          "price": 0.070888,
+          "quantity": 6.71475
+        },
+        {
+          "price": 0.070898,
+          "quantity": 5.337
+        },
+        {
+          "price": 0.070922,
+          "quantity": 10.45725
+        }
+      ],
+      "buy": [
+        {
+          "price": 0.069344,
+          "quantity": 7.1745
+        },
+        {
+          "price": 0.069334,
+          "quantity": 11.03925
+        },
+        {
+          "price": 0.069324,
+          "quantity": 3.3555
+        },
+        {
+          "price": 0.069314,
+          "quantity": 8.89875
+        },
+        {
+          "price": 0.069304,
+          "quantity": 1.67325
+        },
+        {
+          "price": 0.069294,
+          "quantity": 7.79475
+        },
+        {
+          "price": 0.06927,
+          "quantity": 21.138
+        }
+      ],
+      "ts": "2023-02-12 18:31:39",
+      "ts_iso": "2023-02-12T18:31:39+00:00"
+    }
+  }
+}
+```
+[back to the top &#11023;](#table-of-contents)
+
+## Guide to Markets Page
+
+![whole layout](./images/markets_page.png)
+
+#### Estimate conversion
+
+![estimate conversion](./images/create_conversion.png)
+    
+#### Query:
+
+```graphql
+mutation(
+  $source_currency_id: String!
+  $target_currency_id: String!
+  $target_currency_amount: Float
+  $source_currency_amount: Float
+) {
+  create_conversion_quote(
+    source_currency_id: $source_currency_id
+    target_currency_id: $target_currency_id
+    target_currency_amount: $target_currency_amount
+    source_currency_amount: $source_currency_amount
+  ) {
+    expires_at
+    expires_at_iso
+    fees {
+      currency_id
+      amount
+    }
+    price
+    fee_currency_id
+    fee_currency_amount
+    conversion_quote_id
+    source_currency_id
+    target_currency_id
+    target_currency_amount
+    source_currency_amount
+  }
+}
+```
+
+#### Variables:
+
+```json
+{
+  "source_currency_id": "ETH",
+  "target_currency_id": "BTC",
+  "source_currency_amount": 0.2
+}
+```
+
+#### Response:
+
+```json
+{
+  "data": {
+    "create_conversion_quote": {
+      "expires_at": "2023-02-12 18:45:46",
+      "expires_at_iso": "2023-02-12T18:45:46+00:00",
+      "fees": [],
+      "price": 0.068633,
+      "fee_currency_id": "BTC",
+      "fee_currency_amount": 0,
+      "conversion_quote_id": "bb639689-ad37-4962-bbed-0365f814a857",
+      "source_currency_id": "ETH",
+      "target_currency_id": "BTC",
+      "target_currency_amount": 0.0137266,
+      "source_currency_amount": 0.2
+    }
+  }
+}
+```
+[back to the top &#11023;](#table-of-contents)
+
+#### Complete conversion
+
+![complete conversion](./images/complete_conversion.png)
+    
+#### Query:
+
+```graphql
+mutation($conversion_quote_id: String!) {
+  create_conversion_order(conversion_quote_id: $conversion_quote_id) {
+    status
+    message
+    created_at
+    updated_at
+    error_message
+    price
+    fee_currency_id
+    fee_currency_amount
+    conversion_quote_id
+    source_currency_id
+    target_currency_id
+    target_currency_amount
+    source_currency_amount
+  }
+}
+```
+
+#### Variables:
+
+```json
+{
+  "conversion_quote_id": "bb639689-ad37-4962-bbed-0365f814a857"
+}
+```
+
+#### Response:
+
+```json
+{
+  "data": {
+    "create_conversion_order": {
+      "status": "completed",
+      "message": null,
+      "created_at": "2023-02-12 18:45:28",
+      "updated_at": "2023-02-12 18:45:29",
+      "error_message": null,
+      "price": 0.068633,
+      "fee_currency_id": "BTC",
+      "fee_currency_amount": 0,
+      "conversion_quote_id": "bb639689-ad37-4962-bbed-0365f814a857",
+      "source_currency_id": "ETH",
+      "target_currency_id": "BTC",
+      "target_currency_amount": 0.0137266,
+      "source_currency_amount": 0.2
     }
   }
 }
@@ -1748,7 +1996,7 @@ mutation {
 ```
 [back to the top &#11023;](#table-of-contents)
 
-### Fees and Limits structure
+## Fees and Limits structure
 
 We have fee groups and limit groups. User always belong to ONE fee group and ONE limit group. This is essentially properties on user entity, so fee_group_id and limit_group_id are referencing correspondent records fee_groups and limit_groups. 
 
