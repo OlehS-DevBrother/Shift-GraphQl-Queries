@@ -43,6 +43,7 @@ Document with examples of often used graphql requests
         - [How to update fee group and assign beneficiary user?](#12)
         - [How to delete fee group?](#13)
         - [How to add new currency to the platform?](#16)
+        - [How to create user](#17)
   
  5. **[Fees & Limits structure](#fees-and-limits-structure)**
 
@@ -1990,6 +1991,189 @@ mutation {
       "payment_routes": [],
       "precision": 10,
       "type": "fiat"
+    }
+  }
+}
+```
+[back to the top &#11023;](#table-of-contents)
+
+### 17. 
+### Question: How to create user?
+#### roles: [`admin`]
+
+### Answer:
+
+```graphql
+mutation {
+  create_user(
+    username: "best-trader"
+    email: "test_trader_email@mail.com"
+    language: "english"
+    primary_market_currency: "USD"
+    timezone: "UTC"
+    address_city: "New Baltimore"
+    address_country: "US"
+    address_line_1: "70 Marshall Lane"
+    address_line_2: "MI 48047"
+    address_state: "California"
+    kyc_status: incomplete
+    kyc_level: ""
+    kyc_message: ""
+    fee_group_id: "default"
+    limit_group_id: "default"
+    address_zip: ""
+    first_name: "John"
+    crypto_pay: on
+    last_name: "Doe"
+    is_active: on
+    date_of_birth: "01-03-2023"
+    mobile_nr: "+122223333444"
+  ) {
+    serial_id: user_id
+    parent_user_id
+    integer_tracking_id
+    username
+    email
+    mobile_nr
+    language
+    timezone
+    primary_market_currency
+    is_active
+    first_name
+    last_name
+    address_country
+    address_state
+    address_city
+    address_line_1
+    address_line_2
+    address_zip
+    date_of_birth
+    fee_group_id
+    limit_group_id
+    kyc_level
+    kyc_status
+    kyc_message
+    created_at
+    mfa_for_withdraw
+    tax_id
+    account_opening_purpose
+    company_registration_nr
+    company_name
+    company_position
+    updated_at
+    affiliate_code
+    crypto_pay
+    version
+    fee_group {
+      fee_group_id
+      name
+      description
+    }
+    limit_group {
+      limit_group_id
+      name
+      description
+    }
+    favorite_instruments
+    notifications_settings
+    favorite_addresses_crypto {
+      currency_id
+      address
+      network
+    }
+    favorite_fiat_destinations {
+      name
+      bank_name
+    }
+    profile_pic_url
+    company_registration_url
+    memorandum_of_association_url
+    passport_url
+    national_identity_url
+    driver_license_url
+    birth_certificate_url
+    bank_statement_url
+    utility_bill_url
+    proof_of_residence_url
+    proof_of_id_front_url
+    proof_of_id_back_url
+    mfa_status
+    created_at_iso
+    updated_at_iso
+  }
+}
+```
+
+### Response:
+
+```json
+{
+  "data": {
+    "create_user": {
+      "serial_id": "950632d9-b616-4c5f-9247-bbf84454c1a9",
+      "parent_user_id": null,
+      "integer_tracking_id": 7497797076,
+      "username": "best-trader",
+      "email": "test_trader_email@mail.com",
+      "mobile_nr": "+122223333444",
+      "language": "english",
+      "timezone": "UTC",
+      "primary_market_currency": "USD",
+      "is_active": "on",
+      "first_name": "John",
+      "last_name": "Doe",
+      "address_country": "US",
+      "address_state": "California",
+      "address_city": "New Baltimore",
+      "address_line_1": "70 Marshall Lane",
+      "address_line_2": "MI 48047",
+      "address_zip": "",
+      "date_of_birth": "2023-01-03 00:00:00",
+      "fee_group_id": "default",
+      "limit_group_id": "default",
+      "kyc_level": "",
+      "kyc_status": "incomplete",
+      "kyc_message": "",
+      "created_at": "2023-03-01 18:08:29",
+      "mfa_for_withdraw": null,
+      "tax_id": null,
+      "account_opening_purpose": null,
+      "company_registration_nr": null,
+      "company_name": null,
+      "company_position": null,
+      "updated_at": "2023-03-01 18:08:29",
+      "affiliate_code": null,
+      "crypto_pay": "on",
+      "version": null,
+      "fee_group": {
+        "fee_group_id": "default",
+        "name": "Default Fee Group",
+        "description": "Default fee group for all new users"
+      },
+      "limit_group": {
+        "limit_group_id": "default",
+        "name": "Default Limit Group",
+        "description": "Default limit group for all new users"
+      },
+      "favorite_instruments": [],
+      "notifications_settings": [],
+      "favorite_addresses_crypto": [],
+      "favorite_fiat_destinations": [],
+      "profile_pic_url": null,
+      "company_registration_url": null,
+      "memorandum_of_association_url": null,
+      "passport_url": null,
+      "national_identity_url": null,
+      "driver_license_url": null,
+      "birth_certificate_url": null,
+      "bank_statement_url": null,
+      "utility_bill_url": null,
+      "proof_of_residence_url": null,
+      "proof_of_id_front_url": null,
+      "proof_of_id_back_url": null,
+      "mfa_status": "off",
+      "created_at_iso": "2023-03-01T18:08:29+02:00",
+      "updated_at_iso": "2023-03-01T18:08:29+02:00"
     }
   }
 }
