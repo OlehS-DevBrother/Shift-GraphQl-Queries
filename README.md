@@ -2029,7 +2029,7 @@ mutation {
     date_of_birth: "01-03-2023"
     mobile_nr: "+122223333444"
   ) {
-    serial_id: user_id
+    serial_id
     parent_user_id
     integer_tracking_id
     username
