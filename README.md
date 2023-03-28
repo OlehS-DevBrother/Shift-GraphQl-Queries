@@ -25,25 +25,25 @@ Document with examples of often used graphql requests
  4. **[Common Questions](#common-questions)**
     
     - **For admins and traders**
-        - [How to get my current permissions?](#3)
-        - [How to create admin API key to be used for server calls?](#4)
-        - [How to get all open orders for user account?](#6)
-        - [How to count estimate order price?](#8)
-        - [How to calculate and return fee for current user, payment type and currency?](#9)
-        - [How to get the profile data for certain user?](#14)
-        - [How to get deposit address details for crypto deposits?](#15)                  
+        - [How to get my current permissions?](#a-name3)
+        - [How to create admin API key to be used for server calls?](#a-name4)
+        - [How to get all open orders for user account?](#a-name6)
+        - [How to count estimate order price?](#a-name8)
+        - [How to calculate and return fee for current user, payment type and currency?](#a-name9)
+        - [How to get the profile data for certain user?](#a-name14)
+        - [How to get deposit address details for crypto deposits?](#a-name15)                  
          
     - **For admins only**
-        - [How to get list of instruments on exchange?](#1)
-        - [How to create a new instrument?](#2)
-        - [How to create transaction for user account?](#5)
-        - [How to verify two-factor authentication token?](#7)
-        - [How to get information about all available fee groups?](#10)
-        - [How to create new fee group?](#11)
-        - [How to update fee group and assign beneficiary user?](#12)
-        - [How to delete fee group?](#13)
-        - [How to add new currency to the platform?](#16)
-        - [How to create user](#17)
+        - [How to get list of instruments on exchange?](#a-name1)
+        - [How to create a new instrument?](#a-name2)
+        - [How to create transaction for user account?](#a-name5)
+        - [How to verify two-factor authentication token?](#a-name7)
+        - [How to get information about all available fee groups?](#a-name10)
+        - [How to create new fee group?](#a-name11)
+        - [How to update fee group and assign beneficiary user?](#a-name12)
+        - [How to delete fee group?](#a-name13)
+        - [How to add new currency to the platform?](#a-name16)
+        - [How to create user](#a-name17)
   
  5. **[Fees & Limits structure](#fees-and-limits-structure)**
 
@@ -981,9 +981,10 @@ mutation($conversion_quote_id: String!) {
 
 # Common Questions
 
-### 1.
-### Question: How to get list of instruments on exchange?
+### <a name="1">
+### 1. Question: How to get list of instruments on exchange?
 #### roles: [`admin`]
+### </a>
 
 ### Answer:
 
@@ -1018,9 +1019,10 @@ query {
 ````
 [back to the top &#11023;](#table-of-contents)
 
-### 2. 
-### Question: How to create a new instrument?
+### <a name="2">
+### 2. Question: How to create a new instrument?
 #### roles: [`admin`]
+### <\a>
 
 ### Answer:
 
@@ -1113,9 +1115,10 @@ mutation {
 ```
 [back to the top &#11023;](#table-of-contents)
 
-### 3. 
-### Question: How to get my current permissions?
+### <a name="3">
+### 3. Question: How to get my current permissions?
 #### roles: [`admin`, `trader`]
+### </a>
 
 ### Answer:
 
@@ -1226,16 +1229,17 @@ query {
 ```
 [back to the top &#11023;](#table-of-contents)
 
-### 4. 
-### Question: How to create admin API key to be used for server calls?
+### <a name="4">
+### 4. Question: How to create admin API key to be used for server calls?
 #### roles: [`admin`, `trader`]
+### </a>
 
 ### Answer:
 
 ```graphql
 mutation {
   create_api_key(
-    name: "Cirus API key 1"
+    name: "Example API Key 1"
     expires_at: "2050-01-01 00:00:00"
     is_active: on
     permissions: [
@@ -1293,9 +1297,10 @@ mutation {
 ```
 [back to the top &#11023;](#table-of-contents)
 
-### 5. 
-### Question: How to create transaction for user account?
+### <a name="5">
+### 5. Question: How to create transaction for user account?
 #### roles: [`admin`]
+### </a>
 
 ### Answer:
 
@@ -1407,9 +1412,10 @@ query {
 ```
 [back to the top &#11023;](#table-of-contents)
 
-### 6. 
-### Question: How to get all open orders for user account?
+### <a name="6">
+### 6. Question: How to get all open orders for user account?
 #### roles: [`admin`, `trader`]
+### </a>
 
 ### Answer:
 
@@ -1446,9 +1452,10 @@ query {
 ```
 [back to the top &#11023;](#table-of-contents)
 
-### 7. 
-### Question: How to verify two-factor authentication token?
+### <a name="7">
+### 7. Question: How to verify two-factor authentication token?
 #### roles: [`admin`]
+### </a>
 
 ### Answer:
 
@@ -1471,9 +1478,10 @@ mutation {
 ```
 [back to the top &#11023;](#table-of-contents)
 
-### 8. 
-### Question: How to count estimate order price?
+### <a name="8">
+### 8. Question: How to count estimate order price?
 #### roles: [`admin`, `trader`]
+### </a>
 
 ### Answer:
 
@@ -1535,9 +1543,10 @@ query {
 ```
 [back to the top &#11023;](#table-of-contents)
 
-### 9. 
-### Question: How to calculate and return fee for current user, payment type and currency?
+### <a name="9">
+### 9. Question: How to calculate and return fee for current user, payment type and currency?
 #### roles: [`admin`, `trader`]
+### </a>
 
 ### Answer:
 
@@ -1602,9 +1611,10 @@ mutation {
 ```
 [back to the top &#11023;](#table-of-contents)
 
-### 10. 
-### Question: How to get information about all available fee groups?
+### <a name="10">
+### 10. Question: How to get information about all available fee groups?
 #### roles: [`admin`]
+### </a>
 
 ### Answer:
 
@@ -1663,9 +1673,10 @@ query {
 ```
 [back to the top &#11023;](#table-of-contents)
 
-### 11. 
-### Question: How to create new fee group?
+### <a name="11">
+### 11. Question: How to create new fee group?
 #### roles: [`admin`]
+### </a>
 
 ### Answer:
 
@@ -1698,9 +1709,10 @@ mutation {
 ```
 [back to the top &#11023;](#table-of-contents)
 
-### 12. 
-### Question: How to update fee group and assign beneficiary user?
+### <a name="12">
+### 12. Question: How to update fee group and assign beneficiary user?
 #### roles: [`admin`]
+### </a>
 
 ### Answer:
 
@@ -1728,10 +1740,10 @@ mutation {
 ```
 [back to the top &#11023;](#table-of-contents)
 
-### 13. 
-### Question: How to delete fee group?
+### <a name="13">
+### 13. Question: How to delete fee group?
 #### roles: [`admin`]
-
+### </a>
 ### Answer:
 
 ```graphql
@@ -1753,9 +1765,10 @@ mutation {
 ```
 [back to the top &#11023;](#table-of-contents)
 
-### 14. 
-### Question: How to get the profile data for certain user?
+### <a name="14">
+### 14. Question: How to get the profile data for certain user?
 #### roles: [`admin`, `trader`]
+### </a>
 
 ### Answer:
 
@@ -1839,7 +1852,7 @@ query {
   "data": {
     "user": {
       "email": null,
-      "username": "oleg-test-trader",
+      "username": "example-test-trader",
       "user_id": "7766ad4a-57eb-4934-83ff-5757ab3ed276",
       "language": "english",
       "parent_user_id": null,
@@ -1897,9 +1910,10 @@ query {
 ```
 [back to the top &#11023;](#table-of-contents)
 
-### 15. 
-### Question: How to get deposit address details for crypto deposits?
+### <a name="15">
+### 15. Question: How to get deposit address details for crypto deposits?
 #### roles: [`admin`, `trader`]
+### </a>
 
 ### Answer:
 
@@ -1947,9 +1961,10 @@ query {
 ```
 [back to the top &#11023;](#table-of-contents)
 
-### 16. 
-### Question: How to add new currency to the platform?
+### <a name="16">
+### 16. Question: How to add new currency to the platform?
 #### roles: [`admin`]
+### </a>
 
 ### Answer:
 
@@ -1997,9 +2012,10 @@ mutation {
 ```
 [back to the top &#11023;](#table-of-contents)
 
-### 17. 
-### Question: How to create user?
+### <a name="17">
+### 17. Question: How to create user?
 #### roles: [`admin`]
+### </a>
 
 ### Answer:
 
